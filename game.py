@@ -4,17 +4,47 @@ gameBoard = [["", "", "", "", "", "", ""], ["", "", "", "", "", "", ""],
 rows = 6
 cols = 7
 
-def placePiece(col, piece):
+def placePiece(col, piece): 
     if col <= 0 or col >= 8:
-        raise Exception("Invalid placement!")
+        print("Invalid placement!")
+        #enter again
     if piece != "X" and piece != "O":
-        raise Exception("Invalid piece!")
+        print("Invalid piece!")
+        #enter again
     row = 5 
     while gameBoard[row][col] != "":
         row = row - 1
         if row < 0:
-            raise Exception("Column full!")
+            print("Column full!")
+            #enter again
     gameBoard[row][col] = piece
+
+def isGameWon(piece):
+    #horizontal check
+    for row in range(rows):
+        for col in range(cols):
+            if (gameBoard[row][col] == piece and gameBoard[row][col+1] == piece and 
+                gameBoard[row][col+2] == piece and gameBoard[row][col+3] == piece):
+                return True
+    #vertical check
+    for row in range(rows):
+        for col in range(cols):
+            if (gameBoard[row][col] == piece and gameBoard[row+1][col] == piece and 
+            gameBoard[row+2][col] == piece and gameBoard[row+3][col] == piece):
+                return True
+    #diagonal check
+    for row in range(rows):
+        for col in range(cols):
+            if (gameBoard[row][col] == piece and gameBoard[row+1][col+1] == piece and 
+                gameBoard[row+2][col+2] == piece and gameBoard[row+3][col+3] == piece):
+                return True
+    #diagonal check
+    for row in range(rows):
+        for col in range(cols):
+            if (gameBoard[row][col] == piece and gameBoard[row-1][col-1] == piece and
+                gameBoard[row-2][col-2] == piece and gameBoard[row-3][col-3] == piece):
+                return True
+    return False
 
 def printGameBoard():
     for j in range(cols):
@@ -42,3 +72,21 @@ def printGameBoard():
             print("+---", end="")
     print("+")
 
+printGameBoard()
+
+def playGame():
+    play = input("Play game? Y/N")
+    while (play == "Y" and not isGameWon()):
+        columnOne = input("Player one, pick a column to place your piece.")
+        placePiece(columnOne, "X")
+        if (isGameWon("X")):
+            print("Player one wins!")
+            play = input("Play again?")
+        columnTwo = input("Player two, pick a column to place your piece.")
+        placePiece(columnTwo, "O")
+        if (isGameWon("O")):
+            print("Player two wins!")
+            play = input("Play again?")
+    print("Thanks for playing!")
+
+playGame()
