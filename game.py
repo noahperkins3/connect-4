@@ -9,7 +9,7 @@ def placePiece(col, piece):
         raise Exception("Invalid placement!")
     if piece != "X" and piece != "O":
         raise Exception("Invalid piece!")
-    row = 5
+    row = 5 
     while gameBoard[row][col] != "":
         row = row - 1
         if row < 0:
