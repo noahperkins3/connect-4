@@ -1,24 +1,28 @@
 gameBoard = [["", "", "", "", "", "", ""], ["", "", "", "", "", "", ""], 
              ["", "", "", "", "", "", ""], ["", "", "", "", "", "", ""], 
              ["", "", "", "", "", "", ""], ["", "", "", "", "", "", ""]]
+illegalCols = []
 rows = 6
 cols = 7
 
 def placePiece(col, piece): 
-    if col <= 0 or col >= 8:
+    while col <= 0 or col >= 8:
         print("Invalid placement!")
-        #enter again
+        col = input("Pick a new column: ")
+        col = int(col)
     if piece != "X" and piece != "O":
-        print("Invalid piece!")
-        #enter again
+        raise Exception("Invalid piece!")
     row = 5
     col -= 1
-    while gameBoard[row][col] != "":
+    while gameBoard[row][int(col)] != "":
         row = row - 1
         if row < 0:
             print("Column full!")
-            #enter again
-    gameBoard[row][col] = piece
+            illegalCols.append(col)
+            while illegalCols.count(col) != 0:
+                col = int(input("Pick a new column: "))
+                col -= 1
+    gameBoard[row][int(col)] = piece
 
 def isGameWon(piece):
     #horizontal check
@@ -33,17 +37,17 @@ def isGameWon(piece):
             if (gameBoard[row][col] == piece and gameBoard[row+1][col] == piece and 
             gameBoard[row+2][col] == piece and gameBoard[row+3][col] == piece):
                 return True
-    #diagonal check
-    for row in range(rows-2):
-        for col in range(cols-3):
-            if (gameBoard[row][col] == piece and gameBoard[row+1][col+1] == piece and 
-                gameBoard[row+2][col+2] == piece and gameBoard[row+3][col+3] == piece):
+    #up diagonal check
+    for row in range(0, 3):
+        for col in range(3, 7):
+            if (gameBoard[row][col] == piece and gameBoard[row+1][col-1] == piece and 
+                gameBoard[row+2][col-2] == piece and gameBoard[row+3][col-3] == piece):
                 return True
-    #diagonal check
-    for row in range(rows-2):
-        for col in range(cols-3):
-            if (gameBoard[row][col] == piece and gameBoard[row-1][col-1] == piece and
-                gameBoard[row-2][col-2] == piece and gameBoard[row-3][col-3] == piece):
+    #down diagonal check
+    for row in range(0, 3):
+        for col in range(0, 4):
+            if (gameBoard[row][col] == piece and gameBoard[row+1][col+1] == piece and
+                gameBoard[row+2][col+2] == piece and gameBoard[row+3][col+3] == piece):
                 return True
     return False
 
@@ -73,12 +77,12 @@ def printGameBoard():
             print("+---", end="")
     print("+")
 
-printGameBoard()
+
 
 #play game:
-
 play = input("Play game? Y/N: ")
 while (play == "Y"):
+    printGameBoard()
     columnOne = input("Player one, pick a column to place your piece. ")
     placePiece(int(columnOne), "X")
     printGameBoard()
