@@ -11,7 +11,8 @@ def placePiece(col, piece):
     if piece != "X" and piece != "O":
         print("Invalid piece!")
         #enter again
-    row = 5 
+    row = 5
+    col -= 1
     while gameBoard[row][col] != "":
         row = row - 1
         if row < 0:
@@ -27,7 +28,7 @@ def isGameWon(piece):
                 gameBoard[row][col+2] == piece and gameBoard[row][col+3] == piece):
                 return True
     #vertical check
-    for row in range(rows-2):
+    for row in range(rows-3):
         for col in range(cols):
             if (gameBoard[row][col] == piece and gameBoard[row+1][col] == piece and 
             gameBoard[row+2][col] == piece and gameBoard[row+3][col] == piece):
@@ -74,21 +75,28 @@ def printGameBoard():
 
 printGameBoard()
 
-def playGame():
-    play = input("Play game? Y/N: ")
-    while (play == "Y"):
-        columnOne = input("Player one, pick a column to place your piece. ")
-        placePiece(int(columnOne), "X")
-        printGameBoard()
-        if (isGameWon("X")):
-            print("Player one wins!")
-            play = input("Play again? ")
-        columnTwo = input("Player two, pick a column to place your piece. ")
-        placePiece(int(columnTwo), "O")
-        printGameBoard()
-        if (isGameWon("O")):
-            print("Player two wins!")
-            play = input("Play again? ")
-    print("Thanks for playing!")
+#play game:
 
-playGame()
+play = input("Play game? Y/N: ")
+while (play == "Y"):
+    columnOne = input("Player one, pick a column to place your piece. ")
+    placePiece(int(columnOne), "X")
+    printGameBoard()
+    if (isGameWon("X")):
+        print("Player one wins!")
+        gameBoard = [["", "", "", "", "", "", ""], ["", "", "", "", "", "", ""], 
+         ["", "", "", "", "", "", ""], ["", "", "", "", "", "", ""], 
+         ["", "", "", "", "", "", ""], ["", "", "", "", "", "", ""]]
+        play = input("Play again? ")
+        continue
+    columnTwo = input("Player two, pick a column to place your piece. ")
+    placePiece(int(columnTwo), "O")
+    printGameBoard()
+    if (isGameWon("O")):
+        print("Player two wins!")
+        gameBoard = [["", "", "", "", "", "", ""], ["", "", "", "", "", "", ""], 
+         ["", "", "", "", "", "", ""], ["", "", "", "", "", "", ""],
+         ["", "", "", "", "", "", ""], ["", "", "", "", "", "", ""]]
+        play = input("Play again? ")
+        continue
+print("Thanks for playing!")
